@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Dropdown from './components/Dropdown'
 import SelectedVehicle from './components/SelectedVehicle'
+import { useDebounce } from './hooks/useDebounce'
 import { useVehicleSearch } from './hooks/useVehicleSearch'
 
 export default function App() {
   const [query, setQuery] = useState('')
+  const debouncedQuery = useDebounce(query, 300);
   const [selected, setSelected] = useState(null)
   const [similarVehicles, setSimilarVehicles] = useState([])
   const [isDarkMode, setIsDarkMode] = useState(
@@ -12,7 +14,8 @@ export default function App() {
     window.matchMedia('(prefers-color-scheme: dark)').matches
   )
 
-  const { suggestions, error } = useVehicleSearch(query)
+
+  const { suggestions, error } = useVehicleSearch(debouncedQuery)
 
   // Sync dark mode with HTML class and localStorage
   useEffect(() => {

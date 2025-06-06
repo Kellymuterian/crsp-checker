@@ -1,5 +1,5 @@
 export async function fetchVehicles(make, model) {
-  let url = `http://localhost:3000/api/search?make=${encodeURIComponent(make)}`;
+  let url = `/api/search?make=${encodeURIComponent(make)}`;
   if (model) {
     url += `&model=${encodeURIComponent(model)}`;
   }
