@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+
+# env vars
+.env
+.env.*.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# system files
+.DS_Store
+Thumbs.db
+
+# editor settings
+.vscode/
+.idea/
+
+# cache
+.cache/
+*.tsbuildinfo
+
+# deployment artifacts
+.vercel/
+.netlify/
