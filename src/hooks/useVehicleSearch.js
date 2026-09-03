@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { fetchVehicles } from '../services/vehicleApi';
 
 export function useVehicleSearch(query) {
-  const [suggestions, setSuggestions] = useState([]);
+  const [rawSuggestions, setRawSuggestions] = useState([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef(null);
+
+  const isQueryTooShort = query.trim().length < 2;
 
   useEffect(() => {
     // Clear previous request if it exists
@@ -13,9 +15,7 @@ export function useVehicleSearch(query) {
       abortControllerRef.current.abort();
     }
 
-    if (query.trim().length < 2) {
-      setSuggestions([]);
-      setError('');
+    if (isQueryTooShort) {
       return;
     }
 
@@ -23,22 +23,22 @@ export function useVehicleSearch(query) {
       try {
         setIsLoading(true);
         setError('');
-        
+
         // Create new AbortController for this request
         abortControllerRef.current = new AbortController();
-        
+
         const [make = '', ...modelParts] = query.trim().toLowerCase().split(' ');
         const model = modelParts.join(' ');
 
         const data = await fetchVehicles(make, model, {
           signal: abortControllerRef.current.signal
         });
-        
-        setSuggestions(data);
+
+        setRawSuggestions(data);
       } catch (err) {
         if (err.name !== 'AbortError') {
           setError('Failed to fetch suggestions. Please try again later.');
-          setSuggestions([]);
+          setRawSuggestions([]);
         }
       } finally {
         setIsLoading(false);
@@ -51,7 +51,11 @@ export function useVehicleSearch(query) {
         abortControllerRef.current.abort();
       }
     };
-  }, [query]);
+  }, [query, isQueryTooShort]);
 
-  return { suggestions, error, isLoading };
+  return {
+    suggestions: isQueryTooShort ? [] : rawSuggestions,
+    error: isQueryTooShort ? '' : error,
+    isLoading,
+  };
 }
