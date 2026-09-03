@@ -1,27 +1,39 @@
-export default function Dropdown({ suggestions, onSelect }) {
-  if (!suggestions.length) return null
+import {
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
+export default function Dropdown({ suggestions, onSelect }) {
   return (
-    <ul className="absolute z-10 w-full mt-1 max-h-96 overflow-auto rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-xl">
-      {suggestions.map((item) => (
-        <li
-          key={`${item.Make}-${item.Model}-${item["Model number"]}`}
-          onClick={() => onSelect(item)}
-          className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors"
-        >
-          <div className="font-medium text-gray-900 dark:text-white">
-            {item.Make} {item.Model}
-            {item["Model number"] && (
-              <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-1">
-                ({item["Model number"]})
+    <CommandList className="max-h-96">
+      {suggestions.length === 0 ? (
+        <CommandEmpty>No vehicles found.</CommandEmpty>
+      ) : (
+        <CommandGroup>
+          {suggestions.map((item) => (
+            <CommandItem
+              key={`${item.Make}-${item.Model}-${item["Model number"]}`}
+              value={`${item.Make}-${item.Model}-${item["Model number"]}`}
+              onSelect={() => onSelect(item)}
+              className="flex-col items-start gap-1 py-2"
+            >
+              <span className="font-medium text-foreground">
+                {item.Make} {item.Model}
+                {item["Model number"] && (
+                  <span className="ml-1 text-sm font-normal text-muted-foreground">
+                    ({item["Model number"]})
+                  </span>
+                )}
               </span>
-            )}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-            {item.Transmission} • {item["Engine Capacity"]}cc • {item.Fuel}
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
+              <span className="text-sm text-muted-foreground">
+                {item.Transmission} • {item["Engine Capacity"]}cc • {item.Fuel}
+              </span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      )}
+    </CommandList>
+  );
 }
