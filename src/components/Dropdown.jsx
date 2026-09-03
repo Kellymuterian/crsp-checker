@@ -12,10 +12,10 @@ export default function Dropdown({ suggestions, onSelect }) {
         <CommandEmpty>No vehicles found.</CommandEmpty>
       ) : (
         <CommandGroup>
-          {suggestions.map((item) => (
+          {suggestions.map((item, index) => (
             <CommandItem
-              key={`${item.Make}-${item.Model}-${item["Model number"]}`}
-              value={`${item.Make}-${item.Model}-${item["Model number"]}`}
+              key={`${item.Make}-${item.Model}-${item["Model number"]}-${index}`}
+              value={`${item.Make}-${item.Model}-${item["Model number"]}-${index}`}
               onSelect={() => onSelect(item)}
               className="flex-col items-start gap-1 py-2"
             >

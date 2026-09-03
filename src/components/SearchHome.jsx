@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
 import { Command, CommandInput } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import Dropdown from "./Dropdown";
@@ -33,7 +34,7 @@ export default function SearchHome() {
           className="fixed top-4 right-4 z-50 rounded-full"
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
         >
-          {theme === "dark" ? "☀️" : "🌙"}
+          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>
 
         <header className="mb-8 text-center">
